@@ -53,7 +53,9 @@ export default function NewBill() {
   useEffect(() => {
     var total = 0;
     addedProducts.forEach((item) => {
-      total += (Number(item.product.buying_price) || 0) * (item.quantity || 0);
+      if (typeof item.product === "object") {
+        total += (Number(item.product.price) || 0) * (item.quantity || 0);
+      }
     });
 
     setTotals((totals) => ({
@@ -93,9 +95,9 @@ export default function NewBill() {
         .then((res) => {
           if (res.is_same && res.bill) {
             var item: { product: ProductItemType; quantity: number; billNumber: string };
-            if (product.product.unit === "pc" && !product.product.bulk)
+            if (typeof product.product === "object" && product.product.unit === "pc" && !product.product.bulk)
               item = { product, quantity: 1, billNumber: res.bill };
-            else item = { product, quantity: product.length as number, billNumber: res.bill };
+            else item = { product, quantity: product.size as number, billNumber: res.bill };
             setAddedProducts((products) => {
               var found = false;
               for (var i = 0; i < products.length; i++)
@@ -153,18 +155,18 @@ export default function NewBill() {
           ]}
           rows={addedProducts.map((elem, index) => [
             index + 1,
-            elem.product.uuid,
-            elem.product.product.name,
+            typeof elem.product === "object" ? elem.product.uuid : "",
+            typeof elem.product === "object" && "name" in elem.product ? elem.product.name : "",
             elem.billNumber,
-            "₹" + elem.product.buying_price,
+            typeof elem.product === "object" ? "₹" + elem.product.price : "",
             elem.quantity,
-            "₹" +
-              roundOff(
-                (Number(elem.product.buying_price) || 0) * (elem.quantity || 0)
-              ).toLocaleString("en-IN", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              }),
+            typeof elem.product === "object"
+              ? "₹" +
+                roundOff((Number(elem.product.price) || 0) * (elem.quantity || 0)).toLocaleString("en-IN", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              : "",
             <IconButton
               size="small"
               color="error"
@@ -177,8 +179,8 @@ export default function NewBill() {
               }}
             >
               <DeleteTwoTone fontSize="small" />
-            </IconButton>,
-          ])}
+            </IconButton>
+          ]) as React.ReactNode[][]}
         />
       </Grid>
       <Grid item xs={12} md={4} p={2}>

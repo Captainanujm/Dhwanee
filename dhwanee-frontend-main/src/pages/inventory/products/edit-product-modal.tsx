@@ -275,9 +275,17 @@ export default function EditProductModal(props: {
   };
 
   useEffect(() => {
-    setCategory(initialData.subcategory.category);
-    setSubCategory(initialData.subcategory);
-    setUnit(initialData.unit);
+    setCategory(
+      typeof initialData.subcategory === "object"
+        ? initialData.subcategory.category
+        : undefined
+    );
+    setSubCategory(
+      typeof initialData.subcategory === "object"
+        ? initialData.subcategory
+        : undefined
+    );
+    setUnit((initialData as any).unit || "");
     setIsBulk(initialData.bulk);
   }, [initialData]);
 
@@ -385,7 +393,7 @@ export default function EditProductModal(props: {
             />
           <TextField
             variant="outlined"
-            defaultValue={initialData.default_buying_price}
+            defaultValue={initialData.default_selling_price}
             label="Default buying Price"
             error={error.location === "buying_price"}
             helperText={error.location === "buying_price" ? error.message : ""}
@@ -497,17 +505,16 @@ export default function EditProductModal(props: {
                 handleProductEdit({
                   name: refs.name.current ? refs.name.current.value : "",
                   hsn: refs.hsn.current ? refs.hsn.current.value : "",
-                  default_buying_price: Number(
-                    refs.default_buying_price.current?.value
-                  ),
-                  default_selling_price: Number(
-                    refs.default_selling_price.current?.value
-                  ),
+                  default_selling_price: Number(refs.default_selling_price.current?.value),
                   bulk: isBulk,
+                  unit: unit,
                   default_tax: Number(refs.default_tax.current?.value),
                   subcategory: subcategory.id,
                   category: category.id,
-                  unit,
+                  branch: initialData.branch,
+                  is_pieces: initialData.is_pieces,
+                  finished: initialData.finished,
+                  recipe: initialData.recipe,
                   id: initialData.id,
                 });
             }}

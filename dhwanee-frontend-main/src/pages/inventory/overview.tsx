@@ -276,8 +276,8 @@ export default function ProductList() {
               elem.name,
               elem.current_stock,
               elem.default_selling_price,
-              elem.subcategory.category.name,
-              elem.subcategory.name,
+              typeof elem.subcategory === "object" ? elem.subcategory.category.name : "",
+              typeof elem.subcategory === "object" ? elem.subcategory.name : "",
               <Link to={`/store/inventory/products/${elem.id}`}>
                 <IconButton size="small">
                   <LaunchTwoTone fontSize="small" />

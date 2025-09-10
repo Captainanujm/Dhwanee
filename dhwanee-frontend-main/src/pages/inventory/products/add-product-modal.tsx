@@ -289,6 +289,7 @@ export default function AddProductModal(props: {
                     refs.default_selling_price.current?.value
                   ),
                   bulk: isBulk,
+                  unit: "pc", // or use a state variable if you have a unit selector
                   finished: isFinished,
                   is_pieces: isPieces,
                   default_tax: Number(refs.default_tax.current?.value),

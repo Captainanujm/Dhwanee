@@ -78,12 +78,12 @@ export default function PurchaseReturnDetails() {
           rows={purchasereturn.products.map((elem, index) => [
             index + 1,
             elem.uuid,
-            elem.product.name,
-            "₹" + elem.buying_price,
-            elem.length || 1,
+            typeof elem.product === "object" ? elem.product.name : "",
+            "₹" + elem.price,
+            elem.size || 1,
             "₹" +
               roundOff(
-                (Number(elem.buying_price) || 0) * (Number(elem.length || 1))
+                (Number(elem.price) || 0) * (Number(elem.size || 1))
               ).toLocaleString("en-IN", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,

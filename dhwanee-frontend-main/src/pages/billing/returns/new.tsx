@@ -115,10 +115,11 @@ export default function SalesReturn() {
   useEffect(() => {
     var total = 0;
     selectedProducts.forEach((el) => {
-      total +=
-        el.product.unit === "pc" && !el.product.bulk
-          ? Number(el.selling_price)
-          : Number(el.selling_price) * Number(el.length);
+      if (typeof el.product === "object" && el.product.unit === "pc" && !el.product.bulk) {
+        total += Number(el.price);
+      } else if (typeof el.product === "object") {
+        total += Number(el.price) * Number(el.size);
+      }
     });
     setReturnTotal(total);
   }, [selectedProducts]);
@@ -175,13 +176,13 @@ export default function SalesReturn() {
                   inputProps={{ "aria-label": "controlled" }}
                 />,
                 el.uuid,
-                el.product.name,
+                typeof el.product === "object" ? el.product.name : "",
                 "₹" +
-                  (el.product.unit === "pc" && !el.product.bulk
-                    ? Number(el.selling_price)
-                    : Number(el.selling_price) * Number(el.length)
+                  (typeof el.product === "object" && el.product.unit === "pc" && !el.product.bulk
+                    ? Number(el.price)
+                    : Number(el.price) * Number(el.size)
                   ).toLocaleString("en-IN", { minimumFractionDigits: 2 }),
-                el.length && el.length + el.product.unit,
+                el.size && typeof el.product === "object" ? el.size + el.product.unit : "",
               ])}
             />
           </Grid>

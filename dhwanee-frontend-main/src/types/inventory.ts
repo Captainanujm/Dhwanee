@@ -38,6 +38,7 @@ export interface ProductTypeAtCreation {
   bulk: boolean;
   is_pieces: boolean;
   finished: boolean;
+  unit: string;
   recipe: RecipeIngredientType[];
 }
 
@@ -45,6 +46,7 @@ export interface ProductType extends ProductTypeAtCreation {
   agency: number | AgencyType;
   id: number;
   current_stock: number;
+  unit: string;
 }
 
 export interface ProductItemType {

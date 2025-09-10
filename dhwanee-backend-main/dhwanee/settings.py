@@ -65,7 +65,9 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-CORS_ALLOWED_ORIGINS = os.environ.get("CORS_ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+CORS_ALLOWED_ORIGINS = [
+    "https://dhwanee-7ovk.vercel.app/"
+]
 ROOT_URLCONF = "dhwanee.urls"
 
 TEMPLATES = [
